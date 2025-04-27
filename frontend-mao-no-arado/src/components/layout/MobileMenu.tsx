@@ -1,7 +1,6 @@
 'use client'
-import {useState} from "react";
-import {useRouter} from "next/router";
-import {FiMenu, FiX} from "react-icons/fi";
+import { useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
 import Link from "next/link";
 
 const navItems = [
@@ -20,7 +19,6 @@ const navItems = [
 
 export default function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
-    // const { pathname } = useRouter();
 
     return (
         <>
@@ -30,14 +28,15 @@ export default function MobileMenu() {
                 </button>
             </div>
 
-            <div className={`z-100 absolute top-0 left-0 h-full md:hidden ${isOpen ? 'block' : 'hidden'} bg-slate-900 px-4 pt-4 space-y-5 transition-all duration-700`}>
+            <div
+                className={`z-50 absolute top-0 left-0 h-full md:hidden transition-transform duration-700 ${isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'} bg-slate-900 bg-opacity-90 px-4 pt-4 space-y-5`}>
                 {navItems.map((item, idx) => (
                     <div key={idx}>
                         <Link
                             href={item.href}
-                            className={`text-gray-500 hover:text-blue-600  transition-all duration-300 ${item.highlight ? item.className : ''}`}
+                            className={`text-gray-500 hover:text-blue-600 transition-all duration-300 ${item.highlight ? item.className : ''}`}
                             onClick={() => setIsOpen(false)}
-                            >
+                        >
                             {item.label}
                         </Link>
                     </div>

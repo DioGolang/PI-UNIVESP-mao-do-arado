@@ -2,7 +2,7 @@
 export default function Footer() {
     return (
         <>
-            <footer className={`w-full absolute bottom-0 flex flex-col bg-gray-900 text-white`}>
+            <footer className={`w-full flex flex-col bg-gray-900 text-white`}>
                 <div className={`flex flex-col md:flex-row flex-wap justify-around mt-10`}>
                 <div className={`m-5`}>LOGOTIPO</div>
                 <div className={`m-5`}>Links úteis</div>
