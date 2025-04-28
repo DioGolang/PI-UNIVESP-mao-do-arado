@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 import {FiUser} from "react-icons/fi";
-
+import Image from "next/image";
 
 const navItems = [
     {label: 'Home', href: '/'},
@@ -20,32 +20,40 @@ const navItems = [
 export default function Navbar() {
     return (
         <>
-        <nav className="bg-white shadow-md w-full z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
-                    <Link href="/" className="text-xl font-bold text-blue-600">
-                        ONG Logo
-                    </Link>
+            <nav className="bg-white shadow-md w-full z-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16 items-center">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center">
+                            <Image
+                                src="/img/logotipo.svg"
+                                alt="logo"
+                                width={80}
+                                height={80}
+                                className="object-contain"
+                            />
+                        </Link>
 
-                    {/* Menu items (desktop) */}
-                    <ul className="hidden md:flex space-x-7 items-center">
-                        {navItems.map((item, idx) => (
-                            <li key={idx} className={`flex items-center`}>
-                                { idx === navItems.length - 1 ? <FiUser className={`text-2xl text-blue-500`} /> : null }
-                                <Link
-                                    href={item.href}
-                                    className={`text-gray-500 hover:text-blue-600  transition-all duration-300 ${item.highlight ? item.className : ''}`}
+                        {/* Menu items (desktop) */}
+                        <ul className="hidden md:flex space-x-7 items-center">
+                            {navItems.map((item, idx) => (
+                                <li key={idx} className="flex items-center">
+                                    {idx === navItems.length - 1 && (
+                                        <FiUser className="text-2xl text-blue-500 mr-1" />
+                                    )}
+                                    <Link
+                                        href={item.href}
+                                        className={`text-gray-500 hover:text-blue-600 transition-all duration-300 ${item.highlight ? item.className : ''}`}
                                     >
-                                    {item.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <MobileMenu/>
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                        <MobileMenu />
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
         </>
     );
 }
