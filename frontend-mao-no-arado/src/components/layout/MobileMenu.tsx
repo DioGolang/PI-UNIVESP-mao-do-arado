@@ -14,7 +14,7 @@ const navItems = [
     {label: 'Contato', href: '/contato'},
     {label: 'Doe Agora', href: '/agora', highlight: true, className: 'bg-orange-600 rounded-xl px-4 py-2 text-white hover:bg-orange-700'},
     {label: 'Seja voluntário', href: '/voluntario', highlight: true, className: 'text-blue-600'},
-    {label: 'Entrar', href: '/entrar', highlight: true, className: 'text-blue-600'},
+    {label: 'Entrar', href: '/login', highlight: true, className: 'text-blue-600'},
 ];
 
 export default function MobileMenu() {
