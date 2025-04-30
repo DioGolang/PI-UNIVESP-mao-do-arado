@@ -13,6 +13,7 @@ import CookieConsent from "@/components/layout/CookieConsent";
 import FrequentlyAskedQuestions from "@/components/home/FrequentlyAskedQuestions";
 import NextEvents from "@/components/home/NextEvents";
 import OurPresident from "@/components/home/OurPresident";
+import AutisticChildren from "@/components/home/AutisticChildren";
 
 export default function Home() {
     return (
@@ -22,6 +23,7 @@ export default function Home() {
             <About/>
             <Media/>
             <OurProjects/>
+            <AutisticChildren/>
             <Testimonials/>
             <LastestNews/>
             <NextEvents/>

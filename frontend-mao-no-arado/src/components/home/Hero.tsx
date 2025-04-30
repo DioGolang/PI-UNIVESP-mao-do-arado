@@ -1,3 +1,4 @@
+import ButtonOrange from "@/components/utils/ButtonOrange";
 
 
 export default function Hero() {
@@ -8,8 +9,8 @@ export default function Hero() {
                     <div className={``}><h1 className={`text-4xl`}>Juntos Podemos transformar a<br/> vida de muitas pessoas</h1></div>
                     <div className={`mt-2`}>Faça parte desta mundaça e ajude-nos a construir um futuro melhor</div>
                     <div className={`flex flex-row space-x-4 mt-10`}>
-                        <button className={`bg-orange-400 hover:bg-gray-900 shadow-xl text-x1 p-4 rounded-md`}>Saiba mais</button>
-                        <button className={`border-2 border-orange-400 hover:bg-orange-400 shadow-xl text-x1 p-4 rounded-md`}>Doar agora</button>
+                        <ButtonOrange href={`/saibamais`} textContent={`Saiba Mais`} isFilled={true} />
+                        <ButtonOrange href={`/saibamais`} textContent={`Saiba Mais`} isFilled={false} />
                     </div>
                 </div>
             </header>

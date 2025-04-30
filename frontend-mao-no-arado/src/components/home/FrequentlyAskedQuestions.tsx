@@ -42,7 +42,7 @@ export default function FrequentlyAskedQuestions() {
                         >
                             <button
                                 onClick={() => toggleAnswer(index)}
-                                className="flex items-center justify-between w-full"
+                                className="flex items-center justify-between w-full cursor-pointer"
                             >
                                 <h1 className="font-semibold text-gray-700 dark:text-white">
                                     {faq.question}
