@@ -1,11 +1,13 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
     FaHome, FaUsers, FaHandHoldingHeart, FaCalendarAlt, FaChartBar,
     FaFileAlt, FaCog, FaUserCircle, FaSeedling, FaHandshake,
-    FaQuestionCircle, FaNewspaper, FaQuoteLeft
+    FaQuestionCircle, FaNewspaper, FaQuoteLeft, FaChild, FaUserTie
 } from "react-icons/fa";
 
 interface MenuItem {
@@ -19,18 +21,52 @@ interface SidebarProps {
     collapsed: boolean;
 }
 
+// Memoized menu item component to prevent unnecessary re-renders
+const MenuItem = memo(({ item, isActive, collapsed }: {
+    item: MenuItem;
+    isActive: boolean;
+    collapsed: boolean;
+}) => (
+    <li className="px-4">
+        <Link
+            href={item.href}
+            className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors ${
+                isActive
+                    ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-300"
+            }`}
+        >
+            {item.icon && (
+                <div className="w-5 h-5 flex-shrink-0 text-lg">
+                    {item.icon}
+                </div>
+            )}
+            <span className={`text-sm font-medium transition-all duration-200 ${
+                collapsed ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto"
+            }`}>
+                {item.title}
+            </span>
+        </Link>
+    </li>
+));
+MenuItem.displayName = 'MenuItem';
+
+// Define menu items outside the component to prevent recreation on each render
 const menuItems: MenuItem[] = [
-    {title: "Dashboard", icon: <FaHome className="w-5 h-5"/>, href: "/dashboard", active: true},
-    {title: "Voluntários", icon: <FaUsers className="w-5 h-5"/>, href: "/volunteers"},
-    {title: "Doações", icon: <FaHandHoldingHeart className="w-5 h-5"/>, href: "/donations"},
-    {title: "Projetos", icon: <FaSeedling className="w-5 h-5"/>, href: "/projects"},
-    {title: "Eventos", icon: <FaCalendarAlt className="w-5 h-5"/>, href: "/events"},
-    {title: "Depoimentos", icon: <FaQuoteLeft className="w-5 h-5"/>, href: "/testimonials"},
-    {title: "Parceiros", icon: <FaHandshake className="w-5 h-5"/>, href: "/partners"},
-    {title: "Relatórios", icon: <FaChartBar className="w-5 h-5"/>, href: "/reports"},
-    {title: "Documentos", icon: <FaFileAlt className="w-5 h-5"/>, href: "/documents"},
-    {title: "Notícias", icon: <FaNewspaper className="w-5 h-5"/>, href: "/news"},
-    {title: "FAQ", icon: <FaQuestionCircle className="w-5 h-5"/>, href: "/faq"}
+    {title: "Dashboard", icon: <FaHome className="w-5 h-5"/>, href: "/dashboard"},
+    {title: "Voluntários", icon: <FaUsers className="w-5 h-5"/>, href: "/dashboard/volunteers"},
+    {title: "Doações", icon: <FaHandHoldingHeart className="w-5 h-5"/>, href: "/dashboard/donations"},
+    {title: "Projetos", icon: <FaSeedling className="w-5 h-5"/>, href: "/dashboard/projects"},
+    {title: "Estatísticas", icon: <FaChartBar className="w-5 h-5"/>, href: "/dashboard/project-stats"},
+    {title: "Crianças", icon: <FaChild className="w-5 h-5"/>, href: "/dashboard/children"},
+    {title: "Adultos", icon: <FaUserTie className="w-5 h-5"/>, href: "/dashboard/adults"},
+    {title: "Eventos", icon: <FaCalendarAlt className="w-5 h-5"/>, href: "/dashboard/events"},
+    {title: "Depoimentos", icon: <FaQuoteLeft className="w-5 h-5"/>, href: "/dashboard/testimonials"},
+    {title: "Parceiros", icon: <FaHandshake className="w-5 h-5"/>, href: "/dashboard/partners"},
+    {title: "Relatórios", icon: <FaChartBar className="w-5 h-5"/>, href: "/dashboard/reports"},
+    {title: "Documentos", icon: <FaFileAlt className="w-5 h-5"/>, href: "/dashboard/documents"},
+    {title: "Notícias", icon: <FaNewspaper className="w-5 h-5"/>, href: "/dashboard/news"},
+    {title: "FAQ", icon: <FaQuestionCircle className="w-5 h-5"/>, href: "/dashboard/faq"}
 ];
 
 const accountItems: MenuItem[] = [
@@ -38,14 +74,22 @@ const accountItems: MenuItem[] = [
     {title: "Perfil", icon: <FaUserCircle className="w-5 h-5"/>, href: "/profile"}
 ];
 
-export default function Sidebar({collapsed}: SidebarProps) {
+const Sidebar = memo(function Sidebar({collapsed}: SidebarProps) {
+    const pathname = usePathname();
+
+    // Memoize the isActive check to prevent recalculation on each render
+    const isItemActive = useMemo(() => {
+        return (href: string) =>
+            pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+    }, [pathname]);
+
     return (
         <aside
             className={`h-screen bg-gray-900 dark:bg-slate-850 shadow-xl overflow-y-auto transition-all duration-300 ${collapsed ? "w-20" : "w-64"} rounded-r-2xl`}>
             <div className="h-19 p-6">
                 <Link href="/dashboard" className="flex items-center gap-3">
                     <Image
-                        src="/img/logo.png"
+                        src="/img/logotipo.svg"
                         alt="Logo ONG"
                         width={40}
                         height={40}
@@ -64,28 +108,12 @@ export default function Sidebar({collapsed}: SidebarProps) {
             <div className="items-center block w-full h-full grow">
                 <ul className="flex flex-col py-4 space-y-1">
                     {menuItems.map((item, index) => (
-                        <li key={index} className="px-4">
-                            <Link
-                                href={item.href}
-                                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors ${
-                                    item.active
-                                        ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
-                                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-300"
-                                }`}
-                            >
-                                {item.icon && (
-                                    <div className="w-5 h-5 flex-shrink-0 text-lg">
-                                        {item.icon}
-                                    </div>
-                                )}
-                                <span className={`text-sm font-medium transition-all duration-200 ${
-                                    collapsed ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto"
-                                }`}>
-    {item.title}
-</span>
-
-                            </Link>
-                        </li>
+                        <MenuItem
+                            key={index}
+                            item={item}
+                            isActive={isItemActive(item.href)}
+                            collapsed={collapsed}
+                        />
                     ))}
 
                     {!collapsed && (
@@ -97,23 +125,12 @@ export default function Sidebar({collapsed}: SidebarProps) {
                     )}
 
                     {accountItems.map((item, index) => (
-                        <li key={index} className="px-4">
-                            <Link
-                                href={item.href}
-                                className="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-300"
-                            >
-                                {item.icon && (
-                                    <div className="w-5 h-5 flex-shrink-0 text-lg">
-                                        {item.icon}
-                                    </div>
-                                )}
-                                <span className={`text-sm font-medium transition-all duration-200 ${
-                                    collapsed ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto"
-                                }`}>
-    {item.title}
-</span>
-                            </Link>
-                        </li>
+                        <MenuItem
+                            key={index}
+                            item={item}
+                            isActive={pathname === item.href || pathname.startsWith(item.href)}
+                            collapsed={collapsed}
+                        />
                     ))}
                 </ul>
             </div>
@@ -140,4 +157,9 @@ export default function Sidebar({collapsed}: SidebarProps) {
             )}
         </aside>
     );
-}
+});
+
+// Add display name for debugging
+Sidebar.displayName = 'Sidebar';
+
+export default Sidebar;
